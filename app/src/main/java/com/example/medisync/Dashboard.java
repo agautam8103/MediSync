@@ -35,7 +35,7 @@ public class Dashboard extends AppCompatActivity {
     private Database medi_user_saved_data;
     TextView greeting_oxy_user, dash_mesg, heart_rate_label, blood_oxygen_level_label, body_temperature_label,
             Click_to_see_more_label1, Click_to_see_more_label2, Click_to_see_more_label3;
-    Button heart_rate_BTN, blood_oxy_BTN, body_temp_BTN;
+    Button pill_dispenser, mdalert, medminder;
     ImageView heart_pic, temp_pic, blood_oxy_pic, logo;
     private Toolbar toolbar;
 
@@ -52,7 +52,13 @@ public class Dashboard extends AppCompatActivity {
         greeting_oxy_user = findViewById(R.id.welcomemessage);
         medi_user_saved_data = new Database(Dashboard.this);
 
-
+        pill_dispenser = findViewById(R.id.pilldispenserbutton);
+        pill_dispenser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pillDispenser();
+            }
+        });
     }
 
     @Override
@@ -71,12 +77,20 @@ public class Dashboard extends AppCompatActivity {
 
     }
 
+    private void pillDispenser() {
+        Intent intent = new Intent(this, PillDispenser.class);
+        startActivity(intent);
+    }
+
     @Override
     public void onBackPressed() { //Stay in this page if back phone button is pressed at any page
         Intent intent = new Intent(this, Dashboard.class);
         startActivity(intent);
         finish();
     }
+
+
+
 
 }
 

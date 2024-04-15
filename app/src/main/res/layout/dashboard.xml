@@ -5,7 +5,54 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#C6EAE9"
-    tools:context=".Dashboard">
+    tools:context=".Dashboard"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="-2dp">
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/pilldispenserbutton"
+        android:layout_width="350dp"
+        android:layout_height="130dp"
+        android:background="@drawable/rounded_button"
+        android:text="Pill Dispenser"
+        android:textColor="#FFFFFF"
+        android:textSize="35sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar2"
+        app:layout_constraintVertical_bias="0.515" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/mdalert"
+        android:layout_width="350dp"
+        android:layout_height="130dp"
+        android:layout_marginBottom="88dp"
+        android:background="@drawable/rounded_button"
+        android:text="MD ALert"
+        android:textColor="#FFFFFF"
+        android:textSize="35sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/medminder"
+        android:layout_width="350dp"
+        android:layout_height="130dp"
+        android:background="@drawable/rounded_button"
+        android:text="Medminder"
+        android:textColor="#FFFFFF"
+        android:textSize="35sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar2"
+        app:layout_constraintVertical_bias="0.214" />
 
 
     <androidx.appcompat.widget.Toolbar
@@ -49,14 +96,21 @@
         android:id="@+id/welcomemessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="28dp"
         android:text="Welcome!"
         android:textColor="#000000"
         android:textSize="32sp"
         android:textStyle="bold"
-        android:layout_marginTop="24dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar2" />
 
+    <ImageView
+        android:layout_width="72dp"
+        android:layout_height="63dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/caduceus_symbol" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
