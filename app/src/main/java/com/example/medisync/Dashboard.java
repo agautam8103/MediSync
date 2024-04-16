@@ -53,10 +53,25 @@ public class Dashboard extends AppCompatActivity {
         medi_user_saved_data = new Database(Dashboard.this);
 
         pill_dispenser = findViewById(R.id.pilldispenserbutton);
+        mdalert = findViewById(R.id.mdalert);
+        medminder = findViewById(R.id.medminder);
         pill_dispenser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pillDispenser();
+            }
+        });
+        mdalert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mdalert();
+            }
+        });
+
+        medminder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                medminder();
             }
         });
     }
@@ -79,6 +94,14 @@ public class Dashboard extends AppCompatActivity {
 
     private void pillDispenser() {
         Intent intent = new Intent(this, PillDispenser.class);
+        startActivity(intent);
+    }
+    private void medminder() {
+        Intent intent = new Intent(this, MedMinder.class);
+        startActivity(intent);
+    }
+    private void mdalert() {
+        Intent intent = new Intent(this, MDAlert.class);
         startActivity(intent);
     }
 
