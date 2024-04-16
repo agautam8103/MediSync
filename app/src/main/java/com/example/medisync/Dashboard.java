@@ -1,119 +1,133 @@
 package com.example.medisync;
 
 import android.Manifest;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothGatt;
-import android.bluetooth.BluetoothGattCallback;
-import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattDescriptor;
-import android.bluetooth.BluetoothGattService;
-import android.bluetooth.BluetoothManager;
-import android.bluetooth.BluetoothProfile;
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
-import java.util.UUID;
+
+import com.google.android.material.snackbar.Snackbar;
 
 public class Dashboard extends AppCompatActivity {
 
-
+    private static final int PERMISSION_REQUEST_NOTIFICATION = 1001;
+    private static final int PERMISSION_REQUEST_ALARM = 1002;
     private Database medi_user_saved_data;
-    TextView greeting_oxy_user, dash_mesg, heart_rate_label, blood_oxygen_level_label, body_temperature_label,
-            Click_to_see_more_label1, Click_to_see_more_label2, Click_to_see_more_label3;
-    Button pill_dispenser, mdalert, medminder;
-    ImageView heart_pic, temp_pic, blood_oxy_pic, logo;
-    private Toolbar toolbar;
-
+    private TextView greeting_oxy_user;
     private MediUser Medi_user;
-
+    private Button pillDispenser, mdAlert, medMinder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dashboard);
-
-
         medi_user_saved_data = new Database(Dashboard.this);
         greeting_oxy_user = findViewById(R.id.welcomemessage);
-        medi_user_saved_data = new Database(Dashboard.this);
+        pillDispenser = findViewById(R.id.pilldispenserbutton);
+        mdAlert = findViewById(R.id.mdalert);
+        medMinder = findViewById(R.id.medminder);
 
-        pill_dispenser = findViewById(R.id.pilldispenserbutton);
-        mdalert = findViewById(R.id.mdalert);
-        medminder = findViewById(R.id.medminder);
-        pill_dispenser.setOnClickListener(new View.OnClickListener() {
+        pillDispenser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pillDispenser();
             }
         });
-        mdalert.setOnClickListener(new View.OnClickListener() {
+
+        mdAlert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mdalert();
+                mdAlert();
             }
         });
 
-        medminder.setOnClickListener(new View.OnClickListener() {
+        medMinder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                medminder();
+                medMinder();
             }
         });
+
+        checkPermissions();
+        checkUser();
+    }
+
+    private void checkUser() {
+        MediUser medi_user = medi_user_saved_data.getSavedOxyUser();
+
+        if (medi_user.MediUserIsEmpty()) {
+            Intent i = new Intent(this, GetStartedActivity.class);
+            startActivity(i);
+        } else {
+            greeting_oxy_user.setText("Hello " + medi_user.getFirstName() + "!");
+        }
+    }
+
+    private void checkPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.ACCESS_NOTIFICATION_POLICY) != PackageManager.PERMISSION_GRANTED ||
+                    checkSelfPermission(Manifest.permission.SET_ALARM) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_NOTIFICATION_POLICY, Manifest.permission.SET_ALARM}, PERMISSION_REQUEST_NOTIFICATION);
+            }
+        }
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        MediUser medi_user = medi_user_saved_data.getSavedOxyUser();
-
-        if (medi_user.MediUserIsEmpty()) { //Go to register user page if there's no user data
-            Intent i = new Intent(this, GetStartedActivity.class);
-            startActivity(i);
-        } else { //Set everything visible on this page if a user account exists
-            greeting_oxy_user.setText("Hello, " + medi_user.getFirstName() + "!");
+        if (requestCode == PERMISSION_REQUEST_NOTIFICATION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Notification permission granted
+            } else {
+                showPermissionDeniedSnackbar();
+            }
+        } else if (requestCode == PERMISSION_REQUEST_ALARM) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Alarm permission granted
+            } else {
+                showPermissionDeniedSnackbar();
+            }
         }
+    }
 
-
+    private void showPermissionDeniedSnackbar() {
+        Snackbar.make(findViewById(android.R.id.content), "You have denied permission to access notifications or set alarms. These features may not work properly.", Snackbar.LENGTH_LONG)
+                .setAction("OK", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Handle action
+                    }
+                })
+                .show();
     }
 
     private void pillDispenser() {
         Intent intent = new Intent(this, PillDispenser.class);
         startActivity(intent);
     }
-    private void medminder() {
+
+    private void medMinder() {
         Intent intent = new Intent(this, MedMinder.class);
         startActivity(intent);
     }
-    private void mdalert() {
+
+    private void mdAlert() {
         Intent intent = new Intent(this, MDAlert.class);
         startActivity(intent);
     }
 
     @Override
-    public void onBackPressed() { //Stay in this page if back phone button is pressed at any page
-        Intent intent = new Intent(this, Dashboard.class);
-        startActivity(intent);
-        finish();
+    public void onBackPressed() {
+        super.onBackPressed();
+        // Handle back button press if needed
     }
-
-
-
-
 }
-

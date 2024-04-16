@@ -27,16 +27,6 @@
     <string name="year_hint">Year</string>
     <string name="settings">Profile</string>
     <string-array name="med_list">
-        <item>Ibuprofen</item>
-        <item>Melatonin</item>
-        <item>Naproxen</item>
-        <item>Advil</item>
-        <item>Aspirin</item>
-        <item>Bentyl</item>
-        <item>Diazepam</item>
-        <item>Dextrose</item>
-        <item>Tylenol</item>
-        <item>Adderall</item>
     </string-array>
 
 
